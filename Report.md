@@ -1,24 +1,24 @@
-### Insecure Access Control
+## Insecure Access Control
 **Vulnerability:** Clientside Session Validation via Cookies
 **Severity:** Critical
 **Description:** The logic for controlling a client's session is dependent upon an insecure clientside cookie. This allows an attacker to authenticate themselves into an administrative session without legitimate credentials. 
 **Remediation:** Ideally divorce the session validation and creation logic + data from the client. If this is not possible (i.e. stateless application), utilise existing rigorous frameworks for storing session data on the client, such as JWTs. 
 **Asset Domain:** sales.quoccabank.com
 
-#### Writeup 
+### Writeup 
 We note that the server establishes a base64 encoded cookie named `metadata` with a decoded value of `admin=0`. Sending requests with the `metadata` cookie set to the base64 encoded value of `admin=1` (`YWRtaW49MQ==`) authenticates us into the admin dashboard. 
 ![[Pasted image 20210713163115.png]]
 ![[Pasted image 20210713163200.png]]
 ![[Pasted image 20210713163218.png]]
 
-### SQLi in Payment Portal Query
+## SQLi in Payment Portal Query
 **Vulnerability:** SQL Injection in `period` parameter
 **Severity:** Critical
 **Description:** The `period` parameter is vulnerable to SQL injection, allowing execution of arbitrary SQL statements. An attacker may exfiltrate records in the local database or escalate to RCE depending on the environment. 
 **Remediation:** Make use of the prepared statements binding provided in the appropriate backend framework. Refer to `https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html` for further guidance.
 **Asset Domain:** pay-portal.quoccabank.com
 
-#### Writeup
+### Writeup
 By experimenting with common bad characters we notice that a double quote (`"`) in the period parameter causes the server to throw a syntax error - clueing us into the exploitable SQLi vulnerability. 
 ![[Pasted image 20210713163400.png]]
 
